@@ -20,18 +20,7 @@
 package org.apache.ofbiz.workeffort.workeffort;
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.ofbiz.base.util.DateRange;
 import org.apache.ofbiz.base.util.Debug;
@@ -290,10 +279,49 @@ public class WorkEffortServices {
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
+        String workEffortId = (String) context.get("workEffortId");
+        String workEffortParentId = (String) context.get("workEffortParentId");
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+        String workEffortPurposeTypeId = (String) context.get("workEffortPurposeTypeId");
+        String currentStatusId = (String) context.get("currentStatusId");
+
+        List<EntityCondition> searchOptions = new LinkedList<>();
+
+        //typesList.add(EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, workEffortTypeId));
+        if (UtilValidate.isNotEmpty(workEffortId)) {
+            searchOptions.add(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId));
+        }
+        if (UtilValidate.isNotEmpty(workEffortParentId)) {
+            searchOptions.add(EntityCondition.makeCondition("workEffortParentId", EntityOperator.EQUALS, workEffortParentId));
+        }
+        if (UtilValidate.isNotEmpty(workEffortTypeId)) {
+            searchOptions.add(EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, workEffortTypeId));
+        }
+        if (UtilValidate.isNotEmpty(workEffortPurposeTypeId)) {
+            searchOptions.add(EntityCondition.makeCondition("workEffortPurposeTypeId", EntityOperator.EQUALS, workEffortPurposeTypeId));
+        }
+        if (UtilValidate.isNotEmpty(currentStatusId)) {
+            searchOptions.add(EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, currentStatusId));
+        }
+
         List<GenericValue> workEfforts = null;
 
+//        EntityConditionList<EntityExpr> ecl = EntityCondition.makeCondition(
+//                EntityOperator.AND,
+//                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, userLogin.get("partyId")),
+//                EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, "TASK"),
+//                EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "CAL_DECLINED"),
+//                EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "CAL_DELEGATED"),
+//                EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "CAL_COMPLETED"),
+//                EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "CAL_CANCELLED"),
+//                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PRTYASGN_UNASSIGNED"));
+
         try {
-            workEfforts = EntityQuery.use(delegator).from("WorkEffort").queryList();
+            if (searchOptions.size() > 0) {
+                workEfforts = EntityQuery.use(delegator).from("WorkEffort").where(searchOptions).queryList();
+            } else {
+                workEfforts = EntityQuery.use(delegator).from("WorkEffort").queryList();
+            }
         } catch (GenericEntityException e) {
             Debug.logWarning(e, module);
         }

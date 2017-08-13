@@ -104,6 +104,9 @@ public class LoginServices {
         String password = (String) context.get("login.password");
         if (password == null) password = (String) context.get("password");
 
+        System.out.println("username: " + username);
+        System.out.println("password: " + password);
+
         // get the visitId for the history entity
         String visitId = (String) context.get("visitId");
 

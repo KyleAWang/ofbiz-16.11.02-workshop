@@ -253,8 +253,12 @@ under the License.
     <service name="getWorkEfforts" engine="java"
              location="org.apache.ofbiz.workeffort.workeffort.WorkEffortServices" invoke="getWorkEfforts" export="true">
         <description>Get WorkEffort list</description>
-        <attribute type="org.apache.ofbiz.entity.GenericValue" mode="OUT" name="workEffort" optional="true"/>
-        <attribute name="workEfforts" type="List" mode="OUT" optional="false"/>
+        <attribute name="workEffortId" type="java.lang.String" mode="IN" optional="true"/>
+        <attribute name="workEffortParentId" type="java.lang.String" mode="IN" optional="true"/>
+        <attribute name="workEffortTypeId" type="java.lang.String" mode="IN" optional="true"/>
+        <attribute name="workEffortPurposeTypeId" type="java.lang.String" mode="IN" optional="true"/>
+        <attribute name="currentStatusId" type="java.lang.String" mode="IN" optional="true"/>
+        <attribute name="workEfforts" type="java.util.List" mode="OUT" optional="false"/>
     </service>
     <service name="getWorkEffort" engine="java"
             location="org.apache.ofbiz.workeffort.workeffort.WorkEffortServices" invoke="getWorkEffort">
