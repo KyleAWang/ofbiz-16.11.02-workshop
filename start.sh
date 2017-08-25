@@ -1,2 +1,2 @@
 gradle ofbiz --shutdown
-gradle ofbiz --start
+gradle ofbiz --start &
