@@ -680,6 +680,7 @@ public final class UtilHttp {
     }
 
     public static TimeZone getTimeZone(HttpServletRequest request) {
+        System.out.println("***********request: here");
         HttpSession session = request.getSession();
         TimeZone timeZone = (TimeZone) session.getAttribute(SESSION_KEY_TIMEZONE);
         Map<String, String> userLogin = UtilGenerics.cast(session.getAttribute("userLogin"));

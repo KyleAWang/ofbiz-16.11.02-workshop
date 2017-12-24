@@ -26,6 +26,7 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +45,7 @@ import org.apache.axiom.soap.SOAPBody;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axiom.soap.SOAPFactory;
 import org.apache.axiom.soap.SOAPModelBuilder;
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilProperties;
-import org.apache.ofbiz.base.util.UtilXml;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
@@ -177,6 +175,12 @@ public class SOAPEventHandler implements EventHandler {
             OMElement serviceElement = reqBody.getFirstElement();
             serviceName = serviceElement.getLocalName();
             Map<String, Object> parameters = UtilGenerics.cast(SoapSerializer.deserialize(serviceElement.toString(), delegator));
+
+            TimeZone timeZone = UtilHttp.getTimeZone(request);
+            if (timeZone != null) {
+                parameters.put("timeZone", timeZone);
+            }
+
             try {
                 // verify the service is exported for remote execution and invoke it
                 ModelService model = dispatcher.getDispatchContext().getModelService(serviceName);

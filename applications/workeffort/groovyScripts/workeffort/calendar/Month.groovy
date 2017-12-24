@@ -60,6 +60,15 @@ if (followingMonthDays < 0) {
 numDays += followingMonthDays
 Map serviceCtx = dispatcher.getDispatchContext().makeValidContext("getWorkEffortEventsByPeriod", "IN", parameters)
 serviceCtx.putAll(UtilMisc.toMap("userLogin", userLogin, "start", getFrom, "calendarType", "VOID", "numPeriods", numDays, "periodType", Calendar.DATE, "locale", locale, "timeZone", timeZone))
+
+println "groovy userLogin: " + userLogin;
+println "groovy start: " + getFrom;
+println "groovy calendarType: VOID";
+println "groovy numPeriods: " + numDays;
+println "groovy periodType: " + Calendar.DATE;
+println "groovy locale: " + locale;
+println "groovy timeZone: " + timeZone;
+
 if (context.entityExprList) {
     serviceCtx.entityExprList = entityExprList
 }

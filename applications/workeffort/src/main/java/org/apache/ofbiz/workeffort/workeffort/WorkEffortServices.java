@@ -19,25 +19,12 @@
 
 package org.apache.ofbiz.workeffort.workeffort;
 
-import java.sql.Timestamp;
-import java.util.*;
-
-import org.apache.ofbiz.base.util.DateRange;
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.TimeDuration;
-import org.apache.ofbiz.base.util.UtilDateTime;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilMisc;
-import org.apache.ofbiz.base.util.UtilProperties;
-import org.apache.ofbiz.base.util.UtilValidate;
+import com.ibm.icu.util.Calendar;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.condition.EntityCondition;
-import org.apache.ofbiz.entity.condition.EntityConditionList;
-import org.apache.ofbiz.entity.condition.EntityExpr;
-import org.apache.ofbiz.entity.condition.EntityJoinOperator;
-import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.condition.*;
 import org.apache.ofbiz.entity.util.EntityListIterator;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.security.Security;
@@ -48,7 +35,8 @@ import org.apache.ofbiz.service.ServiceUtil;
 import org.apache.ofbiz.service.calendar.TemporalExpression;
 import org.apache.ofbiz.service.calendar.TemporalExpressionWorker;
 
-import com.ibm.icu.util.Calendar;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * WorkEffortServices - WorkEffort related Services
@@ -277,6 +265,8 @@ public class WorkEffortServices {
 
     public static Map<String, Object> getWorkEfforts(DispatchContext ctx, Map<String, ? extends Object> context){
         Delegator delegator = ctx.getDelegator();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         String workEffortId = (String) context.get("workEffortId");
@@ -556,10 +546,22 @@ public class WorkEffortServices {
             filterOutCanceledEvents = Boolean.FALSE;
         }
 
+
+        System.out.println("**********partyId: " + partyId);
+        System.out.println("**********facilityId: " + facilityId);
+        System.out.println("**********fixedAssetId: " + fixedAssetId);
+        System.out.println("**********workEffortTypeId: " + workEffortTypeId);
+        System.out.println("**********filterOutCanceledEvents: " + filterOutCanceledEvents);
+        System.out.println("**********numPeriodsInteger: " + numPeriodsInteger);
+        System.out.println("**********calendarType: " + calendarType);
+        System.out.println("**********startStamp: " + startDay);
+        System.out.println("**********locale: " + locale);
+
         // To be returned, the max concurrent entries for a single period
         int maxConcurrentEntries = 0;
 
         Integer periodTypeObject = (Integer) context.get("periodType");
+        System.out.println("**********periodType: " + periodTypeObject);
         int periodType = 0;
         if (periodTypeObject != null) {
             periodType = periodTypeObject.intValue();
